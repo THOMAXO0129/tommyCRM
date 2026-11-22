@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f7fb">
+  <title>Orbit CRM | Relaciones que avanzan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" data-page="dashboard">
+        <span class="brand-mark"><span></span><span></span><span></span></span>
+        <span>orbit<span class="brand-light">crm</span></span>
+      </a>
+      <div class="workspace-label">ESPACIO DE TRABAJO</div>
+      <nav class="main-nav" aria-label="Navegación principal">
+        <button class="nav-link active" data-page="dashboard"><span class="nav-icon">◫</span> Resumen</button>
+        <div class="nav-caption">GESTIÓN</div>
+        <button class="nav-link" data-page="contacts"><span class="nav-icon">♙</span> Contactos <span class="nav-count" id="contact-nav-count">0</span></button>
+        <button class="nav-link" data-page="companies"><span class="nav-icon">▦</span> Empresas</button>
+        <button class="nav-link" data-page="deals"><span class="nav-icon">↗</span> Oportunidades</button>
+        <button class="nav-link" data-page="tasks"><span class="nav-icon">☑</span> Tareas</button>
+        <button class="nav-link" data-page="activities"><span class="nav-icon">◷</span> Actividad</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="help-card">
+          <div class="help-icon">✦</div>
+          <strong>Tu negocio, en órbita</strong>
+          <p>Organiza relaciones y oportunidades en un solo lugar.</p>
+        </div>
+        <button class="profile-button" id="profile-button">
+          <span class="avatar avatar-purple">AM</span>
+          <span class="profile-copy"><strong>Alex Morgan</strong><small>Administrador</small></span>
+          <span class="profile-menu">···</span>
+        </button>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobile-menu" aria-label="Abrir menú">☰</button>
+        <div class="breadcrumbs"><span>Workspace</span><span class="crumb-sep">/</span><strong id="breadcrumb-current">Resumen</strong></div>
+        <div class="topbar-actions">
+          <label class="global-search"><span>⌕</span><input id="global-search" type="search" placeholder="Buscar en tu CRM..." aria-label="Buscar en el CRM"><kbd>⌘ K</kbd></label>
+          <button class="icon-button notification-button" aria-label="Notificaciones">♧<i></i></button>
+          <span class="avatar avatar-purple top-avatar">AM</span>
+        </div>
+      </header>
+      <section class="page-content">
+        <div id="toast" class="toast" role="status"></div>
+        <section id="dashboard-page" class="page active">
+          <div class="page-heading dashboard-heading">
+            <div><div class="eyebrow" id="today-label">TU NEGOCIO, DE UN VISTAZO</div><h1>Buenos días, Alex <span class="wave">✦</span></h1><p class="page-subtitle">Esto es lo que está pasando con tu negocio.</p></div>
+            <button class="button button-primary" data-create="activity"><span>＋</span> Registrar actividad</button>
+          </div>
+          <div class="stat-grid">
+            <article class="stat-card"><div class="stat-top"><span>Contactos totales</span><span class="stat-icon mint">♙</span></div><div class="stat-number" id="stat-contacts">0</div><div class="stat-foot"><span class="stat-neutral">Base de relaciones</span><span class="sparkline green">⌁⌁⌁</span></div></article>
+            <article class="stat-card"><div class="stat-top"><span>Empresas</span><span class="stat-icon lilac">▦</span></div><div class="stat-number" id="stat-companies">0</div><div class="stat-foot"><span class="stat-neutral">Cuentas registradas</span><span class="sparkline purple">⌁⌁⌁</span></div></article>
+            <article class="stat-card"><div class="stat-top"><span>Pipeline activo</span><span class="stat-icon peach">↗</span></div><div class="stat-number" id="stat-pipeline">$0</div><div class="stat-foot"><span class="stat-neutral" id="stat-deals-caption">0 oportunidades abiertas</span><span class="sparkline orange">⌁⌁⌁</span></div></article>
+            <article class="stat-card"><div class="stat-top"><span>Tareas pendientes</span><span class="stat-icon blue">☑</span></div><div class="stat-number" id="stat-tasks">0</div><div class="stat-foot"><span class="stat-neutral">Por completar</span><span class="sparkline blue-text">⌁⌁⌁</span></div></article>
+          </div>
+          <div class="dashboard-grid">
+            <article class="panel pipeline-panel">
+              <div class="panel-heading"><div><h2>Pipeline de ventas</h2><p>Oportunidades por etapa</p></div><button class="text-button" data-page="deals">Ver oportunidades <span>→</span></button></div>
+              <div id="pipeline-chart" class="pipeline-chart"></div>
+            </article>
+            <article class="panel quick-panel">
+              <div class="panel-heading"><div><h2>Acceso rápido</h2><p>Continúa con lo importante</p></div></div>
+              <div class="quick-actions">
+                <button data-create="contact"><span class="quick-icon quick-mint">♙</span><span><strong>Añadir contacto</strong><small>Guarda una nueva relación</small></span><b>→</b></button>
+                <button data-create="deal"><span class="quick-icon quick-peach">↗</span><span><strong>Crear oportunidad</strong><small>Haz avanzar tu pipeline</small></span><b>→</b></button>
+                <button data-create="task"><span class="quick-icon quick-blue">☑</span><span><strong>Crear tarea</strong><small>No dejes nada pendiente</small></span><b>→</b></button>
+              </div>
+            </article>
+            <article class="panel activity-panel">
+              <div class="panel-heading"><div><h2>Actividad reciente</h2><p>Las últimas interacciones de tu equipo</p></div><button class="text-button" data-page="activities">Ver todo <span>→</span></button></div>
+              <div id="recent-activities" class="activity-list"></div>
+            </article>
+            <article class="panel tasks-panel">
+              <div class="panel-heading"><div><h2>Próximas tareas</h2><p>Lo que viene a continuación</p></div><button class="text-button" data-page="tasks">Ver todas <span>→</span></button></div>
+              <div id="upcoming-tasks" class="upcoming-list"></div>
+            </article>
+          </div>
+        </section>
+        <section id="records-page" class="page">
+          <div class="page-heading records-heading"><div><div class="eyebrow" id="records-eyebrow">GESTIONA TU NEGOCIO</div><h1 id="records-title">Contactos</h1><p class="page-subtitle" id="records-subtitle">Administra tus relaciones y mantén cada conversación en contexto.</p></div><button class="button button-primary" id="add-record-button"><span>＋</span> <span id="add-record-label">Añadir contacto</span></button></div>
+          <article class="panel records-panel">
+            <div class="records-toolbar"><div class="table-search"><span>⌕</span><input id="table-search" type="search" placeholder="Buscar..."></div><div class="toolbar-right"><select class="table-filter hidden" id="table-filter" aria-label="Filtrar registros"></select><button class="button button-outline" id="export-button">⇩ <span>Exportar</span></button><button class="button button-outline" id="filter-button">☷ <span>Filtrar</span></button></div></div>
+            <div class="table-wrap"><table><thead id="table-head"></thead><tbody id="table-body"></tbody></table><div class="empty-state hidden" id="empty-state"><span>◌</span><strong>Aún no hay registros</strong><p>Añade tu primer registro para empezar a organizar tu CRM.</p><button class="button button-primary" id="empty-create-button">＋ Añadir registro</button></div></div>
+            <div class="table-footer"><span id="record-count">0 registros</span><div class="pagination"><button disabled>←</button><span>1</span><button disabled>→</button></div></div>
+          </article>
+        </section>
+      </section>
+    </main>
+  </div>
+  <div class="modal-backdrop" id="modal-backdrop">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-heading"><div><span class="eyebrow" id="modal-eyebrow">NUEVO REGISTRO</span><h2 id="modal-title">Añadir contacto</h2></div><button class="modal-close" id="modal-close" aria-label="Cerrar">×</button></div>
+      <form id="record-form"><div id="form-fields" class="form-grid"></div><div class="form-error" id="form-error"></div><div class="modal-footer"><button type="button" class="button button-outline" id="cancel-button">Cancelar</button><button type="submit" class="button button-primary" id="save-button">Guardar</button></div></form>
+    </section>
+  </div>
+  <script>
+  (() => {
+    const state = { page: "dashboard", records: [], companies: [], contacts: [], deals: [], editId: null, formType: null, filterField: null, recordLoadId: 0, toastTimer: null };
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => [...document.querySelectorAll(selector)];
+    const config = {
+      contacts: { title: "Contactos", singular: "contacto", url: "/api/contacts", subtitle: "Administra tus relaciones y mantén cada conversación en contexto.", columns: [["contact", "Contacto"], ["company_name", "Empresa"], ["email", "Correo electrónico"], ["phone", "Teléfono"], ["status", "Estado"]], fields: [
+        ["first_name", "Nombre", "text", true], ["last_name", "Apellido", "text", true], ["email", "Correo electrónico", "email"], ["phone", "Teléfono", "tel"], ["job_title", "Cargo", "text"], ["company_id", "Empresa", "company"], ["status", "Estado", "select", true, ["Lead", "Prospect", "Customer", "Inactive"]], ["notes", "Notas", "textarea"]
+      ]},
+      companies: { title: "Empresas", singular: "empresa", url: "/api/companies", subtitle: "Centraliza la información de las cuentas y organizaciones.", columns: [["name", "Empresa"], ["industry", "Sector"], ["city", "Ciudad"], ["phone", "Teléfono"], ["contact_count", "Contactos"]], fields: [
+        ["name", "Nombre de la empresa", "text", true], ["industry", "Sector", "text"], ["website", "Sitio web", "url"], ["phone", "Teléfono", "tel"], ["city", "Ciudad", "text"], ["notes", "Notas", "textarea"]
+      ]},
+      deals: { title: "Oportunidades", singular: "oportunidad", url: "/api/deals", subtitle: "Sigue cada oportunidad desde la prospección hasta el cierre.", columns: [["title", "Oportunidad"], ["company_name", "Empresa"], ["contact_name", "Contacto"], ["value", "Valor"], ["stage", "Etapa"], ["expected_close", "Cierre previsto"]], fields: [
+        ["title", "Nombre de la oportunidad", "text", true], ["value", "Valor", "number", true], ["stage", "Etapa", "select", true, ["Prospecting", "Qualified", "Proposal", "Negotiation", "Won", "Lost"]], ["expected_close", "Fecha de cierre prevista", "date"], ["company_id", "Empresa", "company"], ["contact_id", "Contacto", "contact"], ["notes", "Notas", "textarea"]
+      ]},
+      tasks: { title: "Tareas", singular: "tarea", url: "/api/tasks", subtitle: "Prioriza el seguimiento y convierte los pendientes en progreso.", columns: [["title", "Tarea"], ["contact_name", "Contacto"], ["deal_title", "Oportunidad"], ["due_date", "Fecha límite"], ["priority", "Prioridad"], ["status", "Estado"]], fields: [
+        ["title", "Título", "text", true], ["description", "Descripción", "textarea"], ["due_date", "Fecha límite", "date"], ["priority", "Prioridad", "select", true, ["Low", "Medium", "High"]], ["status", "Estado", "select", true, ["Open", "In progress", "Done"]], ["contact_id", "Contacto", "contact"], ["deal_id", "Oportunidad", "deal"]
+      ]},
+      activities: { title: "Actividad", singular: "actividad", url: "/api/activities", subtitle: "Un historial compartido de llamadas, reuniones, correos y notas.", columns: [["kind", "Tipo"], ["subject", "Asunto"], ["contact_name", "Contacto"], ["deal_title", "Oportunidad"], ["created_at", "Fecha"]], fields: [
+        ["kind", "Tipo de actividad", "select", true, ["Note", "Call", "Email", "Meeting"]], ["subject", "Asunto", "text", true], ["details", "Detalles", "textarea"], ["contact_id", "Contacto", "contact"], ["deal_id", "Oportunidad", "deal"]
+      ]}
+    };
+    const stageNames = { Prospecting: "Prospección", Qualified: "Cualificada", Proposal: "Propuesta", Negotiation: "Negociación", Won: "Ganada", Lost: "Perdida" };
+    const labels = { Lead: "Lead", Prospect: "Prospecto", Customer: "Cliente", Inactive: "Inactivo", Open: "Abierta", "In progress": "En curso", Done: "Completada", Low: "Baja", Medium: "Media", High: "Alta", Note: "Nota", Call: "Llamada", Email: "Correo", Meeting: "Reunión" };
+    const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
+    const money = (value) => new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR", maximumFractionDigits: 2 }).format(Number(value || 0));
+    const displayDate = (value) => { if (!value) return "—"; const parsed = new Date(value.length === 10 ? `${value}T12:00:00` : value); return Number.isNaN(parsed.getTime()) ? escapeHtml(value) : parsed.toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "numeric" }); };
+    const initials = (record) => `${record.first_name?.[0] || ""}${record.last_name?.[0] || ""}`.toUpperCase() || "•";
+    async function api(url, options = {}) {
+      const response = await fetch(url, { ...options, headers: { "Content-Type": "application/json", ...(options.headers || {}) } });
+      if (!response.ok) { const result = await response.json().catch(() => ({})); throw new Error(result.error || "No se pudo completar la solicitud."); }
+      return response.status === 204 ? null : response.json();
+    }
+    function toast(message, error = false) { const box = $("#toast"); box.textContent = message; box.className = `toast show${error ? " toast-error" : ""}`; clearTimeout(state.toastTimer); state.toastTimer = setTimeout(() => box.className = "toast", 3200); }
+    function setPage(page) {
+      state.page = page;
+      $$(".page").forEach(item => item.classList.remove("active"));
+      $$(".nav-link").forEach(item => item.classList.toggle("active", item.dataset.page === page));
+      $("#sidebar").classList.remove("sidebar-open");
+      if (page === "dashboard") { $("#dashboard-page").classList.add("active"); $("#breadcrumb-current").textContent = "Resumen"; loadDashboard(); return; }
+      $("#records-page").classList.add("active");
+      const settings = config[page]; $("#breadcrumb-current").textContent = settings.title; $("#records-title").textContent = settings.title; $("#records-subtitle").textContent = settings.subtitle;
+      $("#add-record-label").textContent = `Añadir ${settings.singular}`; $("#records-eyebrow").textContent = page === "activities" ? "HISTORIAL DEL EQUIPO" : "GESTIONA TU NEGOCIO";
+      $("#export-button").classList.toggle("hidden", page !== "contacts");
+      const filterDefinition = settings.fields.find(field => ["stage", "status", "priority", "kind"].includes(field[0]) && field[2] === "select");
+      state.filterField = filterDefinition?.[0] || null;
+      $("#filter-button").classList.toggle("hidden", !filterDefinition);
+      $("#table-filter").classList.add("hidden");
+      $("#table-filter").innerHTML = filterDefinition ? `<option value="">Todos</option>${filterDefinition[4].map(value => `<option value="${escapeHtml(value)}">${escapeHtml(stageNames[value] || labels[value] || value)}</option>`).join("")}` : "";
+      $("#table-filter").value = "";
+      loadRecords();
+    }
+    async function refreshOptions() {
+      [state.companies, state.contacts, state.deals] = await Promise.all([
+        api("/api/companies"), api("/api/contacts"), api("/api/deals")
+      ]);
+      $("#contact-nav-count").textContent = state.contacts.length;
+    }
+    async function loadDashboard() {
+      try {
+        const data = await api("/api/dashboard");
+        $("#stat-contacts").textContent = data.contacts; $("#stat-companies").textContent = data.companies;
+        $("#stat-pipeline").textContent = money(data.pipeline_value); $("#stat-deals-caption").textContent = `${data.open_deals} oportunidades abiertas`; $("#stat-tasks").textContent = data.open_tasks;
+        const maxValue = Math.max(1, ...data.stages.map(item => item.value));
+        $("#pipeline-chart").innerHTML = data.stages.length ? data.stages.map(item => `<div class="pipeline-row"><div class="pipeline-label"><span>${escapeHtml(stageNames[item.stage] || item.stage)}</span><strong>${money(item.value)}</strong></div><div class="pipeline-track"><span class="pipeline-fill stage-${escapeHtml(item.stage.toLowerCase())}" style="width:${Math.max(3, item.value / maxValue * 100)}%"></span></div><small>${item.count} ${item.count === 1 ? "oportunidad" : "oportunidades"}</small></div>`).join("") : `<div class="mini-empty">Todavía no hay oportunidades. <button data-create="deal">Crear la primera →</button></div>`;
+        $("#recent-activities").innerHTML = data.recent_activities.length ? data.recent_activities.map(item => `<div class="activity-item"><span class="activity-symbol ${escapeHtml(item.kind.toLowerCase())}">${item.kind === "Call" ? "☎" : item.kind === "Email" ? "✉" : item.kind === "Meeting" ? "▦" : "✎"}</span><div class="activity-content"><strong>${escapeHtml(item.subject)}</strong><small>${escapeHtml(labels[item.kind] || item.kind)}${item.contact_name ? ` · ${escapeHtml(item.contact_name)}` : ""}</small></div><time>${displayDate(item.created_at)}</time></div>`).join("") : `<div class="mini-empty">Aún no hay actividad registrada.</div>`;
+        $("#upcoming-tasks").innerHTML = data.upcoming_tasks.length ? data.upcoming_tasks.map(item => `<div class="upcoming-item"><span class="task-check ${item.status === "Done" ? "checked" : ""}">${item.status === "Done" ? "✓" : ""}</span><div class="upcoming-content"><strong>${escapeHtml(item.title)}</strong><small>${item.contact_name ? escapeHtml(item.contact_name) : "Sin contacto asociado"}</small></div><time>${displayDate(item.due_date)}</time></div>`).join("") : `<div class="mini-empty">¡Todo al día! No tienes tareas pendientes.</div>`;
+      } catch (error) { toast(error.message, true); }
+    }
+    async function loadRecords() {
+      try {
+        const requestId = ++state.recordLoadId;
+        const page = state.page;
+        await refreshOptions();
+        const search = encodeURIComponent($("#table-search").value.trim());
+        const records = await api(`${config[page].url}?q=${search}`);
+        if (requestId !== state.recordLoadId || page !== state.page) return;
+        state.records = records;
+        renderTable();
+      } catch (error) { toast(error.message, true); }
+    }
+    function badge(value) {
+      const normalized = String(value || "").toLowerCase().replaceAll(" ", "-");
+      return `<span class="badge badge-${escapeHtml(normalized)}"><i></i>${escapeHtml(stageNames[value] || labels[value] || value || "—")}</span>`;
+    }
+    function renderTable() {
+      const settings = config[state.page];
+      $("#table-head").innerHTML = `<tr>${settings.columns.map(column => `<th>${escapeHtml(column[1])}</th>`).join("")}<th class="actions-heading"></th></tr>`;
+      const filterValue = $("#table-filter").value;
+      const visibleRecords = state.filterField && filterValue ? state.records.filter(record => record[state.filterField] === filterValue) : state.records;
+      $("#table-body").innerHTML = visibleRecords.map(record => {
+        const cells = settings.columns.map(([key]) => {
+          let value = record[key];
+          if (key === "contact") return `<td><div class="contact-cell"><span class="avatar avatar-small">${escapeHtml(initials(record))}</span><span><strong>${escapeHtml(`${record.first_name} ${record.last_name}`)}</strong><small>${escapeHtml(record.job_title || "")}</small></span></div></td>`;
+          if (key === "title" && state.page === "tasks") return `<td><strong class="table-primary">${escapeHtml(value)}</strong></td>`;
+          if (key === "title" && state.page === "activities") return `<td><strong class="table-primary">${escapeHtml(value)}</strong></td>`;
+          if (key === "title" && state.page === "deals") return `<td><strong class="table-primary">${escapeHtml(value)}</strong></td>`;
+          if (key === "name") return `<td><strong class="table-primary">${escapeHtml(value)}</strong></td>`;
+          if (key === "value") return `<td><strong class="money-cell">${money(value)}</strong></td>`;
+          if (key === "stage" || key === "status" || key === "priority" || key === "kind") return `<td>${badge(value)}</td>`;
+          if (key === "created_at" || key === "expected_close" || key === "due_date") return `<td>${displayDate(value)}</td>`;
+          return `<td>${escapeHtml(value ?? "—") || "—"}</td>`;
+        }).join("");
+        const canEdit = state.page !== "activities";
+        return `<tr>${cells}<td class="row-actions">${canEdit ? `<button class="row-action" data-action="edit" data-id="${record.id}" title="Editar">✎</button>` : ""}<button class="row-action danger-action" data-action="delete" data-id="${record.id}" title="Eliminar">⌫</button></td></tr>`;
+      }).join("");
+      $("#empty-state").classList.toggle("hidden", visibleRecords.length > 0);
+      $("#empty-state strong").textContent = state.records.length ? "No hay resultados para este filtro" : $("#table-search").value.trim() ? "No se encontraron resultados" : "Aún no hay registros";
+      $("#empty-state p").textContent = state.records.length || $("#table-search").value.trim()
+        ? "Prueba con otros términos o cambia el filtro."
+        : "Añade tu primer registro para empezar a organizar tu CRM.";
+      $("#empty-create-button").classList.toggle("hidden", state.records.length > 0 || Boolean($("#table-search").value.trim()));
+      $("#record-count").textContent = `${visibleRecords.length} ${visibleRecords.length === 1 ? "registro" : "registros"}`;
+    }
+    function fieldMarkup([name, label, type, required, choices]) {
+      const req = required ? " required" : "";
+      if (type === "textarea") return `<label class="form-field full-field"><span>${escapeHtml(label)}</span><textarea name="${name}" rows="3" placeholder="Añade detalles..."></textarea></label>`;
+      if (type === "select" || type === "company" || type === "contact" || type === "deal") {
+        let options = choices || (type === "company" ? state.companies.map(item => [item.id, item.name]) : type === "contact" ? state.contacts.map(item => [item.id, `${item.first_name} ${item.last_name}`]) : state.deals.map(item => [item.id, item.title]));
+        return `<label class="form-field"><span>${escapeHtml(label)}${required ? " *" : ""}</span><select name="${name}"${req}><option value="">${type === "select" ? "Selecciona una opción" : "Sin asignar"}</option>${options.map(item => { const val = type === "select" ? item : item[0]; const text = type === "select" ? labels[item] || item : item[1]; return `<option value="${escapeHtml(val)}">${escapeHtml(text)}</option>`; }).join("")}</select></label>`;
+      }
+      return `<label class="form-field"><span>${escapeHtml(label)}${required ? " *" : ""}</span><input name="${name}" type="${type}"${type === "number" ? ' min="0" step="0.01"' : ""}${req} placeholder="${type === "date" ? "" : `Escribe ${label.toLowerCase()}...`}"></label>`;
+    }
+    async function openModal(type, record = null) {
+      const activity = type === "activity";
+      const key = activity ? "activities" : ({ contact: "contacts", company: "companies", deal: "deals", task: "tasks" }[type] || type);
+      try { await refreshOptions(); }
+      catch (error) { toast(error.message, true); return; }
+      const settings = config[key];
+      state.formType = key;
+      state.editId = record?.id || null;
+      $("#modal-title").textContent = `${record ? "Editar" : "Añadir"} ${settings.singular}`;
+      $("#modal-eyebrow").textContent = record ? "ACTUALIZA LOS DATOS" : "NUEVO REGISTRO";
+      $("#save-button").textContent = record ? "Guardar cambios" : "Guardar";
+      $("#form-error").textContent = "";
+      $("#form-fields").innerHTML = settings.fields.map(fieldMarkup).join("");
+      if (record) Object.entries(record).forEach(([name, value]) => { const input = $("#record-form").elements.namedItem(name); if (input) input.value = value ?? ""; });
+      $("#modal-backdrop").classList.add("visible");
+      setTimeout(() => $("#form-fields input, #form-fields select, #form-fields textarea")?.focus(), 80);
+    }
+    function closeModal() { $("#modal-backdrop").classList.remove("visible"); $("#record-form").reset(); state.editId = null; state.formType = null; }
+    async function deleteRecord(id) {
+      const settings = config[state.page];
+      if (!window.confirm(`¿Eliminar este registro de ${settings.singular}? Esta acción no se puede deshacer.`)) return;
+      try { await api(`${settings.url}/${id}`, { method: "DELETE" }); toast(`${settings.singular[0].toUpperCase()}${settings.singular.slice(1)} eliminado.`); await loadRecords(); }
+      catch (error) { toast(error.message, true); }
+    }
+    $$(".nav-link").forEach(button => button.addEventListener("click", () => setPage(button.dataset.page)));
+    document.addEventListener("click", event => {
+      const pageButton = event.target.closest("[data-page]");
+      if (pageButton && !pageButton.classList.contains("nav-link")) { event.preventDefault(); setPage(pageButton.dataset.page); }
+      const createButton = event.target.closest("[data-create]");
+      if (createButton) openModal(createButton.dataset.create);
+      const action = event.target.closest("[data-action]");
+      if (action) {
+        const record = state.records.find(item => item.id === Number(action.dataset.id));
+        if (action.dataset.action === "edit" && record) openModal(state.page, record);
+        if (action.dataset.action === "delete") deleteRecord(action.dataset.id);
+      }
+    });
+    $("#add-record-button").addEventListener("click", () => openModal(state.page));
+    $("#empty-create-button").addEventListener("click", () => openModal(state.page));
+    $("#modal-close").addEventListener("click", closeModal); $("#cancel-button").addEventListener("click", closeModal);
+    $("#modal-backdrop").addEventListener("click", event => { if (event.target === $("#modal-backdrop")) closeModal(); });
+    $("#record-form").addEventListener("submit", async event => {
+      event.preventDefault(); $("#form-error").textContent = "";
+      const settings = config[state.formType];
+      const formData = new FormData(event.currentTarget);
+      const payload = Object.fromEntries(formData.entries());
+      ["company_id", "contact_id", "deal_id"].forEach(key => { if (payload[key] === "") payload[key] = null; else if (payload[key]) payload[key] = Number(payload[key]); });
+      if (payload.value !== undefined) payload.value = Number(payload.value || 0);
+      try {
+        await api(`${settings.url}${state.editId ? `/${state.editId}` : ""}`, { method: state.editId ? "PUT" : "POST", body: JSON.stringify(payload) });
+        closeModal(); toast("Cambios guardados correctamente.");
+        if (state.page === "dashboard") { await refreshOptions(); loadDashboard(); } else loadRecords();
+      } catch (error) { $("#form-error").textContent = error.message; }
+    });
+    $("#table-search").addEventListener("input", () => { clearTimeout(state.searchTimer); state.searchTimer = setTimeout(loadRecords, 220); });
+    $("#export-button").addEventListener("click", () => { window.location.href = "/api/export/contacts.csv"; });
+    $("#filter-button").addEventListener("click", () => { $("#table-filter").classList.toggle("hidden"); if (!$("#table-filter").classList.contains("hidden")) $("#table-filter").focus(); });
+    $("#table-filter").addEventListener("change", renderTable);
+    $("#global-search").addEventListener("keydown", event => { if (event.key === "Enter") { if (state.page === "dashboard") setPage("contacts"); $("#table-search").value = event.currentTarget.value; loadRecords(); } });
+    document.addEventListener("keydown", event => { if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") { event.preventDefault(); $("#global-search").focus(); } if (event.key === "Escape") closeModal(); });
+    $("#mobile-menu").addEventListener("click", () => $("#sidebar").classList.toggle("sidebar-open"));
+    const currentHour = new Date().getHours();
+    document.querySelector(".dashboard-heading h1").innerHTML = `${currentHour < 12 ? "Buenos días" : currentHour < 19 ? "Buenas tardes" : "Buenas noches"}, Alex <span class="wave">✦</span>`;
+    $("#today-label").textContent = new Intl.DateTimeFormat("es-ES", { weekday: "long", day: "numeric", month: "long" }).format(new Date()).toUpperCase();
+    loadDashboard(); refreshOptions().catch(error => toast(error.message, true));
+  })();
+  </script>
+</body>
+</html>
